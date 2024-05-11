@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text to Speech</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    input[type="text"] {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #speakButton {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+    }
+    #status {
+      margin-top: 20px;
+      font-style: italic;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <input type="text" id="textInput" placeholder="Enter text">
+    <br>
+    <button id="speakButton">Speak</button>
+    <br>
+    <div id="status"></div>
+  </div>
+
+  <script>
+    var input = document.getElementById('textInput');
+    var speakButton = document.getElementById('speakButton');
+    var statusDiv = document.getElementById('status');
+
+    speakButton.addEventListener('click', function() {
+      var textInput = input.value;
+      var utterance = new SpeechSynthesisUtterance(textInput);
+      var voices = window.speechSynthesis.getVoices();
+      var femaleVoice = voices.find(voice => voice.name.toLowerCase().includes('female'));
+      if (femaleVoice) {
+        utterance.voice = femaleVoice;
+      }
+      window.speechSynthesis.speak(utterance);
+      statusDiv.textContent = 'Speaking...';
+      utterance.onend = function() {
+        statusDiv.textContent = 'Speech synthesis completed.';
+      };
+    });
+  </script>
+</body>
+</html>
